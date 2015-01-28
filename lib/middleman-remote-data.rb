@@ -1,31 +1,27 @@
-# Require core library
 require 'middleman-core'
+require 'middleman-remote-data/commands/remote_data'
 
 class MiddlemanRemoteData < ::Middleman::Extension
 
   def initialize(app, options_hash={}, &block)
     super
 
-    require 'faraday'
-    require 'faraday_middleware'
-    require 'faraday-http-cache'
+    require 'middleman-remote-data/data_source'
 
     app.include ClassMethods
   end
 
   module ClassMethods
     def data_source(name, url)
-      connection = Faraday.new do |builder|
-        builder.use Faraday::Request::UrlEncoded
-        builder.use Faraday::Adapter::NetHttp
-        builder.use Faraday::HttpCache
-        builder.use FaradayMiddleware::ParseXml,  :content_type => /\bxml$/
-        builder.use FaradayMiddleware::ParseJson, :content_type => /\bjson$/
-      end
+      data_sources[name] = data_source = MiddlemanRemoteData::DataSource.new(self, name, url)
+      data.callbacks name, Proc.new { data_source.data }
+    end
 
-      data.callbacks name, Proc.new { connection.get(url).body }
+    def data_sources
+      @data_sources ||= {}
     end
   end
+
 end
 
 MiddlemanRemoteData.register(:remote_data)
