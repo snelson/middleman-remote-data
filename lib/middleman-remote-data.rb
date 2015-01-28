@@ -8,6 +8,7 @@ class MiddlemanRemoteData < ::Middleman::Extension
 
     require 'faraday'
     require 'faraday_middleware'
+    require 'faraday-http-cache'
 
     app.include ClassMethods
   end
@@ -17,6 +18,7 @@ class MiddlemanRemoteData < ::Middleman::Extension
       connection = Faraday.new do |builder|
         builder.use Faraday::Request::UrlEncoded
         builder.use Faraday::Adapter::NetHttp
+        builder.use Faraday::HttpCache
         builder.use FaradayMiddleware::ParseXml,  :content_type => /\bxml$/
         builder.use FaradayMiddleware::ParseJson, :content_type => /\bjson$/
       end

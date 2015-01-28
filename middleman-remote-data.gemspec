@@ -22,5 +22,6 @@ Gem::Specification.new do |s|
   # Additional dependencies
   s.add_runtime_dependency("faraday", ">= 0.9.1")
   s.add_runtime_dependency("faraday_middleware", ">= 0.9.1")
+  s.add_runtime_dependency("faraday-http-cache", ">= 1.0.0")
   s.add_runtime_dependency("multi_xml", ">= 0.5.5")
 end
