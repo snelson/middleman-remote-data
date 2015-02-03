@@ -17,6 +17,7 @@ class MiddlemanRemoteData::Fetcher
 
   def build_connection
     Faraday.new do |builder|
+      builder.use FaradayMiddleware::FollowRedirects
       builder.use Faraday::Request::UrlEncoded
       builder.use Faraday::Adapter::NetHttp
       builder.use Faraday::HttpCache
