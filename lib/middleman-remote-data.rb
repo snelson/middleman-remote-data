@@ -8,7 +8,7 @@ class MiddlemanRemoteData < ::Middleman::Extension
 
     require 'middleman-remote-data/data_source'
 
-    app.include ClassMethods
+    app.send :include, ClassMethods
   end
 
   module ClassMethods
